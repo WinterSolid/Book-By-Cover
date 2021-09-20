@@ -19,8 +19,7 @@ class SearchManager {
         else {return}
         
         let URLParams = [ "q": "isbn: \(isbn)"]
-        URL
-    }
+    
     URL = URL.appendingQueryParameters(URLParams)
     var request = URLRequest(url: URL)
     request.httpMethod = "GET"
@@ -40,35 +39,36 @@ class SearchManager {
         }catch {
             print(error)
         }
-            }
+        }
         else {
             print("URL Session Task Failed: %@", error!.localizedDescription);
         }
         })
         task.resume()
-        session.finishTaskAndInvalidate()
+        //session.finishTaskAndInvalidate()
     }
 }
-protocol URLQueryPArameterStringConvertible {
+protocol URLQueryParameterStringConvertible {
     var queryParameters: String {get}
 }
 
-extension Dictionary: URLQueryPArameterStringConvertible {
+extension Dictionary: URLQueryParameterStringConvertible {
     var queryParameters: String {
         var parts: [String] = []
         for (key, value) in self {
-            let part = String(format: "%@$%@",
-                    String(describing: key)).addingPercentEncoding(withAllowedCharacters: urlQueryAllowed)!,
-                String(describing: value)).addingPercentEncoding(withAllowedCharacters: urlQueryAllowed)!)
+            let part = String(format: "%@=%@",
+                String(describing: key).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!,
+                String(describing: value).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)
             parts.append(part as String)
         }
         return parts.joined(separator: "&")
     }
+    
 }
 
 extension URL {
     func appendingQueryParameters(_ parametersDictionary: Dictionary<String , String>) -> URL {
         let URLString : String = String(format: "$@*$@", self.absoluteString, parametersDictionary.queryParameters)
-        return URL(string: URLString)
+        return URL(string: URLString)!
     }
 }

@@ -41,7 +41,7 @@ struct ContentView: View {
                 }) {
                     Image(systemName: "barcode")
                 }.sheet(isPresented: $isPresented) {
-                    BarCodeScanner(isbn: $isbn, foundBooks: ?foundBooks)
+                    barCodeScanner(isbn: $isbn, foundBooks: ?foundBooks)
                 }
             }
     
@@ -65,4 +65,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
+}
