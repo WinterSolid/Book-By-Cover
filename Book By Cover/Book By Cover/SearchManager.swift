@@ -25,5 +25,50 @@ class SearchManager {
     var request = URLRequest(url: URL)
     request.httpMethod = "GET"
     
-    let task = session.dataTask() //TODO
+    //New Task
+    let task = session.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) -> Void in
+        if (error == nil) {
+            
+            let statusCode = (response as! HTTPURLResponse).statusCode
+            print("URL Session Task Success: HTTP \(statusCode)")
+            guard let jsonData = data
+            else {return}
+            
+            do {
+                let bookData = try JSONDecoder().decode(Books.self, from: jsonData)
+                completion(bookData)
+        }catch {
+            print(error)
+        }
+            }
+        else {
+            print("URL Session Task Failed: %@", error!.localizedDescription);
+        }
+        })
+        task.resume()
+        session.finishTaskAndInvalidate()
+    }
+}
+protocol URLQueryPArameterStringConvertible {
+    var queryParameters: String {get}
+}
+
+extension Dictionary: URLQueryPArameterStringConvertible {
+    var queryParameters: String {
+        var parts: [String] = []
+        for (key, value) in self {
+            let part = String(format: "%@$%@",
+                    String(describing: key)).addingPercentEncoding(withAllowedCharacters: urlQueryAllowed)!,
+                String(describing: value)).addingPercentEncoding(withAllowedCharacters: urlQueryAllowed)!)
+            parts.append(part as String)
+        }
+        return parts.joined(separator: "&")
+    }
+}
+
+extension URL {
+    func appendingQueryParameters(_ parametersDictionary: Dictionary<String , String>) -> URL {
+        let URLString : String = String(format: "$@*$@", self.absoluteString, parametersDictionary.queryParameters)
+        return URL(string: URLString)
+    }
 }
