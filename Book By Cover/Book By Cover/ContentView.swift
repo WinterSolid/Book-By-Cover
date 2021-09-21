@@ -25,8 +25,9 @@ struct ContentView: View {
             NavigationView {
                 Form {
                     Section(header: Text ("About this Book")) {
-                        Text("\(foundBooks?.items.first?.volumeinfo.title ?? "Title")")
-                        Text("\(foundBooks?.items.first?.author.title ?? "Author")")
+                        Text("\(foundBooks?.items.first?.volumeInfo.title ?? "Title")")
+                        Text("\(foundBooks?.items.first?.volumeInfo.subtitle ?? "Subtitle")")
+                        Text("\(foundBooks?.items.first?.volumeInfo.author ?? "Author")")
                     }
                     Section(header: Text (" + Info")) {
                     Text("\(foundBooks?.items.first?.publishDate.title ?? "Published")")
@@ -35,15 +36,14 @@ struct ContentView: View {
                     
                 }
                 }.navigationTitle("􀫕 Info")
-                .navigationBarItems(trailing:
-                                        Button(action:
-                                                {self.isPresented.toggle()
-                }) {
+                .navigationBarItems(trailing: Button(action:
+                                                {self.isPresented.toggle()})
+                {
                     Image(systemName: "barcode")
                 }.sheet(isPresented: $isPresented) {
                     barCodeScanner(isbn: $isbn, foundBooks: ?foundBooks)
                 }
-            }
+            )}
     
     }
 }

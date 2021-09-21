@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Book: Decodable {
-    var items: [Bookitem]
+struct Books: Decodable {
+    var items: [BookItem]
     
 }
 struct BookItem: Decodable {
@@ -18,6 +18,7 @@ struct BookItem: Decodable {
 }
 struct VolumeInfo: Decodable {
     let title: String
+    let subtitle: String?
     let authors: [String]
     let publishDate: String
     let isbn: String
