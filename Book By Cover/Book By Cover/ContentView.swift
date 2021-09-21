@@ -27,12 +27,11 @@ struct ContentView: View {
                     Section(header: Text ("About this Book")) {
                         Text("\(foundBooks?.items.first?.volumeInfo.title ?? "Title")")
                         Text("\(foundBooks?.items.first?.volumeInfo.subtitle ?? "Subtitle")")
-                        Text("\(foundBooks?.items.first?.volumeInfo.author ?? "Author")")
+                     //   Text("\(foundBooks?.items.first?.volumeInfo.authors ?? "Authors")")
                     }
                     Section(header: Text (" + Info")) {
-                    Text("\(foundBooks?.items.first?.publishDate.title ?? "Published")")
-                    
-                    Text("\(foundBooks?.items.first?.isbn.title ?? "isbn")")
+                        Text("\(foundBooks?.items.first?.volumeInfo.publishDate ?? "Published")")
+                        Text("\(foundBooks?.items.first?.volumeInfo.isbn ?? "isbn")")
                     
                 }
                 }.navigationTitle("􀫕 Info")
@@ -41,7 +40,7 @@ struct ContentView: View {
                 {
                     Image(systemName: "barcode")
                 }.sheet(isPresented: $isPresented) {
-                    barCodeScanner(isbn: $isbn, foundBooks: ?foundBooks)
+                    barCodeScanner(isbn: $isbn, foundBooks: $foundBooks)
                 }
             )}
     
